@@ -10,8 +10,9 @@ from device offsets, native exploit payloads, and KernelSU build artifacts.
 
 [Latest release](https://github.com/BuSung-dev/Root-My-Galaxy/releases)
 
-The device feed and native payloads are maintained in
-[Root-My-Galaxy-Payloads](https://github.com/BuSung-dev/Root-My-Galaxy-Payloads).
+The device feed and native payloads are maintained in the
+[Root-My-Galaxy-Payloads](https://github.com/k-o-n-t-o-r/Root-My-Galaxy-Payloads/tree/r9q-g990b-lizh2)
+`r9q-g990b-lizh2` branch.
 
 ## Application
 
