@@ -87,7 +87,6 @@ import androidx.compose.material.icons.rounded.VerifiedUser
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
@@ -98,7 +97,6 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -111,8 +109,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.ToggleButton
-import androidx.compose.material3.ToggleButtonDefaults
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -785,7 +782,7 @@ private fun InstallStatusCard(installState: InstallUiState, onInstall: () -> Uni
             horizontalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             when {
-                installState.busy -> LoadingIndicator(
+                installState.busy -> CircularProgressIndicator(
                     modifier = Modifier.size(44.dp),
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
@@ -1632,7 +1629,7 @@ private fun UpdateSettingsCard(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             when {
-                status is UpdateStatus.Checking -> LoadingIndicator(modifier = Modifier.size(28.dp))
+                status is UpdateStatus.Checking -> CircularProgressIndicator(modifier = Modifier.size(28.dp))
                 status is UpdateStatus.Downloading -> CircularProgressIndicator(
                     progress = { status.progress },
                     modifier = Modifier.size(28.dp),
@@ -1747,7 +1744,7 @@ private fun TargetSelectionSheet(
                     modifier = Modifier.fillMaxWidth().height(220.dp),
                     contentAlignment = Alignment.Center,
                 ) {
-                    LoadingIndicator(color = MaterialTheme.colorScheme.onSurface)
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.onSurface)
                 }
                 catalog.error != null -> Column(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp),
@@ -1966,24 +1963,27 @@ private fun ThemeModeSelector(
     val themeModes = AppThemeMode.entries
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        themeModes.forEachIndexed { index, mode ->
-            ToggleButton(
-                checked = themeMode == mode,
-                onCheckedChange = {
+        themeModes.forEach { mode ->
+            Button(
+                onClick = {
                     clickHaptic(view)
                     onThemeModeChanged(mode)
                 },
                 modifier = Modifier.weight(1f).semantics { role = Role.RadioButton },
-                colors = ToggleButtonDefaults.toggleButtonColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (themeMode == mode) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.surfaceContainerHighest
+                    },
+                    contentColor = if (themeMode == mode) {
+                        MaterialTheme.colorScheme.onPrimary
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    },
                 ),
-                shapes = when (index) {
-                    0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
-                    themeModes.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
-                    else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
-                },
                 contentPadding = PaddingValues(horizontal = 10.dp),
             ) {
                 Icon(
@@ -1994,7 +1994,7 @@ private fun ThemeModeSelector(
                     },
                     contentDescription = null,
                 )
-                Spacer(Modifier.size(ToggleButtonDefaults.IconSpacing))
+                Spacer(Modifier.size(8.dp))
                 Text(themeModeLabel(mode), maxLines = 1)
             }
         }

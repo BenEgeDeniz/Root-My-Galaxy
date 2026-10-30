@@ -38,7 +38,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -241,7 +241,7 @@ private fun InstallerStatusCard(installState: InstallUiState) {
             ) {
                 AnimatedContent(targetState = installState.phase, label = "install-status-icon") { phase ->
                     when {
-                        installState.busy -> LoadingIndicator(
+                        installState.busy -> CircularProgressIndicator(
                             modifier = Modifier.size(44.dp),
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
                         )
@@ -332,7 +332,7 @@ private fun InstallerSteps(phase: InstallPhase) {
                         )
                     }
                     if (stepState == 1 && phase !in setOf(InstallPhase.Failed, InstallPhase.Ready)) {
-                        LoadingIndicator(
+                        CircularProgressIndicator(
                             modifier = Modifier.size(24.dp),
                             color = MaterialTheme.colorScheme.onSurface,
                         )
